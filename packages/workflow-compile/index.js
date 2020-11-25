@@ -61,7 +61,7 @@ async function compile(config) {
 
 const WorkflowCompile = {
   async compile(options) {
-    const config = prepareConfig(options);
+    const config = await prepareConfig(options);
 
     if (config.events) config.events.emit("compile:start");
 
@@ -98,7 +98,7 @@ const WorkflowCompile = {
   },
 
   async save(options, {contracts, sources, compilations}) {
-    const config = prepareConfig(options);
+    const config = await prepareConfig(options);
 
     await fse.ensureDir(config.contracts_build_directory);
 
@@ -123,7 +123,7 @@ const WorkflowCompile = {
   },
 
   async assignNames(options, { contracts }) {
-    const config = prepareConfig(options);
+    const config = await prepareConfig(options);
 
     if (!config.db || !config.db.enabled || contracts.length === 0) {
       return;
