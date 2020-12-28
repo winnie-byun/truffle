@@ -137,6 +137,11 @@ export type Definitions = Meta.Definitions<Collections>;
 
 export type Definition<N extends CollectionName> = Definitions[N];
 
+export type Input<N extends CollectionName = CollectionName> = Meta.Resource<
+  Collections,
+  N
+>;
+
 export type Resource<N extends CollectionName = CollectionName> = Meta.Resource<
   Collections,
   N

@@ -6,19 +6,24 @@ import { WorkflowCompileResult } from "@truffle/compile-common";
 import { ContractObject } from "@truffle/contract-schema/spec";
 
 import { Db, IdObject } from "@truffle/db/meta";
+import { definitions, CollectionName } from "@truffle/db/resources";
 
 import { generateInitializeLoad } from "./initialize";
 import { generateNamesLoad } from "./names";
 import { Compilation, Contract, generateCompileLoad } from "./compile";
 import { Artifact, generateMigrateLoad } from "./migrate";
+import { Resources, ResourceMethods } from "./resources";
 
-import { ProcessorRunner, forDb } from "./process";
+import { ProcessorRunner, forDb, resources } from "./process";
+export { resources };
 
 /**
  * Interface between @truffle/db and Truffle-at-large. Accepts external
  * Truffle concepts such as compilation results and migrated artifacts.
  */
-export class Project {
+export class Project implements Resources<"networks"> {
+  networks: ResourceMethods<"networks">;
+
   /**
    * Construct abstraction and idempotentally add a project resource
    */
@@ -119,8 +124,16 @@ export class Project {
     if (options.forProvider) {
       this.forProvider = options.forProvider;
     }
+
+    for (const collectionName of Object.keys(definitions)) {
+      this[collectionName] = {
+        load: async (inputs) =>
+          await this.run(resources.load, collectionName, inputs)
+      }
+    }
   }
 }
+
 
 class ConnectedProject extends Project {
   /**
