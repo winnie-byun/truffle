@@ -112,9 +112,11 @@ export abstract class Databases<C extends Collections> implements Workspace<C> {
         .reduce((a, b) => ({ ...a, ...b }), {});
 
     try {
+      const selector = fixIdSelector(options.selector);
+      debug("selector %O", selector);
       const { docs }: any = await this.collections[collectionName].find({
         ...options,
-        selector: fixIdSelector(options.selector)
+        selector
       });
 
       // make sure we include `id` in the response as well
@@ -123,7 +125,7 @@ export abstract class Databases<C extends Collections> implements Workspace<C> {
       log("Found.");
       return result;
     } catch (error) {
-      console.log(`Error fetching all ${collectionName}\n`);
+      console.log("Error finding %s\n", collectionName);
       console.log(error);
       return ([] as unknown) as SavedInput<C, N>[];
     }
