@@ -4,7 +4,8 @@ const debug = logger("db:meta:pouch:sqlite");
 import path from "path";
 import fse from "fs-extra";
 import PouchDB from "pouchdb";
-import PouchDBNodeWebSQLAdapter from "pouchdb-adapter-node-websql";
+import sqldown from "sqldown";
+import PouchDBAdapterLevelDB from "pouchdb-adapter-leveldb";
 
 import { Collections } from "@truffle/db/meta/collections";
 import { Databases } from "./databases";
@@ -16,11 +17,15 @@ export class SqliteDatabases<C extends Collections> extends Databases<C> {
     this.directory = options.settings.directory;
     fse.ensureDirSync(this.directory);
 
-    PouchDB.plugin(PouchDBNodeWebSQLAdapter);
+    PouchDB.plugin(PouchDBAdapterLevelDB);
   }
 
   createDatabase(resource) {
-    const savePath = path.resolve(this.directory, resource);
-    return new PouchDB(savePath, { adapter: "websql" });
+    const savePath = path.join(this.directory, resource);
+    return new PouchDB(savePath, {
+      adapter: "leveldb",
+      // @ts-ignore
+      db: sqldown
+    });
   }
 }
