@@ -8,6 +8,7 @@ export * from "./types";
 import { DatabasesOptions } from "./databases";
 
 import { CouchDatabases } from "./couch";
+import { LeveldownDatabases } from "./leveldown";
 import { FSDatabases } from "./fs";
 import { MemoryDatabases } from "./memory";
 import { SqliteDatabases } from "./sqlite";
@@ -54,6 +55,13 @@ const concretize = <C extends Collections>(
         settings: settings || getDefaultCouchAdapterSettings()
       };
     }
+    case "leveldown": {
+      return {
+        constructor: LeveldownDatabases,
+        settings:
+          settings || getDefaultLeveldownAdapterSettings(workingDirectory)
+      };
+    }
     case "fs": {
       return {
         constructor: FSDatabases,
@@ -88,4 +96,8 @@ const getDefaultFSAdapterSettings = workingDirectory => ({
 
 const getDefaultSqliteAdapterSettings = workingDirectory => ({
   directory: path.join(workingDirectory, ".db", "sqlite")
+});
+
+const getDefaultLeveldownAdapterSettings = workingDirectory => ({
+  directory: path.join(workingDirectory, ".db", "leveldown")
 });
