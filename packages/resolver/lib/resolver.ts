@@ -28,14 +28,14 @@ export class Resolver {
       this.sources.unshift(new Truffle(options));
     }
 
-    if (options.db && options.db.connect) {
-      debug("adding TruffleDB resolver");
-      this.sources.unshift(new TruffleDB(
-        options.working_directory,
-        options.db.connect,
-        options.db.project
-      ));
-    }
+    // if (options.db && options.db.connect) {
+    //   debug("adding TruffleDB resolver");
+    //   this.sources.unshift(new TruffleDB(
+    //     options.working_directory,
+    //     options.db.connect,
+    //     options.db.project
+    //   ));
+    // }
   }
 
   // This function might be doing too much. If so, too bad (for now).
