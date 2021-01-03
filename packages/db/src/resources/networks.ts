@@ -15,7 +15,14 @@ export const networks: Definition<"networks"> = {
     resourcesMutate: "networksAdd",
     ResourcesMutate: "NetworksAdd"
   },
-  createIndexes: [{ fields: ["historicBlock.height"] }],
+  createIndexes: [
+    {
+      fields: ["historicBlock.height"]
+    },
+    {
+      fields: ["networkId", "historicBlock.height"]
+    }
+  ],
   idFields: ["networkId", "historicBlock"],
   typeDefs: gql`
     type Network implements Resource & Named {
