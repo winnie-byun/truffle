@@ -1,10 +1,10 @@
 import { logger } from "@truffle/db/logger";
-const debug = logger("db:pouch:couch");
+const debug = logger("db:meta:pouch:couch");
 
 import PouchDB from "pouchdb";
 import { kebabCase } from "change-case";
 
-import { Collections } from "@truffle/db/meta";
+import { Collections } from "@truffle/db/meta/collections";
 import { Databases } from "./databases";
 
 export interface CouchDatabaseSettings {
